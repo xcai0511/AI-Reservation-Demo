@@ -1,12 +1,27 @@
 
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, Users } from "lucide-react";
+import { Calendar, Clock, Users, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = ({ onReserveClick }: { onReserveClick: () => void }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmYmY3ZjMiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJtMzYgMzQgNi0ydi0ySDI4djJsNiAyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
+      
+      {/* Admin Button */}
+      <div className="absolute top-6 right-6 z-20">
+        <Button
+          onClick={() => navigate("/admin")}
+          variant="outline"
+          className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg"
+        >
+          <Settings className="w-4 h-4 mr-2" />
+          Admin Dashboard
+        </Button>
+      </div>
       
       <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
         <h1 className="text-6xl font-bold text-gray-900 mb-6 animate-fade-in">
