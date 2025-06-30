@@ -10,16 +10,23 @@ const Hero = ({ onReserveClick }: { onReserveClick: () => void }) => {
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmYmY3ZjMiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJtMzYgMzQgNi0ydi0ySDI4djJsNiAyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
+    <div className="relative min-h-screen luxury-gradient flex items-center justify-center overflow-hidden">
+      {/* Elegant overlay pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/20"></div>
+      
+      {/* Subtle geometric pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-20 w-32 h-32 border border-white rotate-45"></div>
+        <div className="absolute bottom-40 right-32 w-24 h-24 border border-white rotate-12"></div>
+        <div className="absolute top-1/2 left-1/4 w-16 h-16 border border-white rotate-45"></div>
+      </div>
       
       {/* Admin Button */}
-      <div className="absolute top-6 right-6 z-20">
+      <div className="absolute top-8 right-8 z-20">
         <Button
           onClick={() => navigate("/admin")}
           variant="outline"
-          className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg"
+          className="bg-black/10 backdrop-blur-md border-white/20 text-white hover:bg-white/10 shadow-xl transition-all duration-300"
         >
           <Settings className="w-4 h-4 mr-2" />
           Admin Dashboard
@@ -27,48 +34,54 @@ const Hero = ({ onReserveClick }: { onReserveClick: () => void }) => {
       </div>
 
       {/* Chatbot Button */}
-      <div className="fixed bottom-6 right-6 z-20">
+      <div className="fixed bottom-8 right-8 z-20">
         <Button
           onClick={() => setIsChatBotOpen(true)}
           size="lg"
-          className="bg-amber-600 hover:bg-amber-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 rounded-full w-14 h-14"
+          className="gold-gradient hover:shadow-2xl text-black shadow-xl transition-all duration-300 transform hover:scale-105 rounded-full w-16 h-16 animate-elegant-glow"
         >
           <MessageCircle className="w-6 h-6" />
         </Button>
       </div>
       
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
-        <h1 className="text-6xl font-bold text-gray-900 mb-6 animate-fade-in">
-          Bella Vista
-          <span className="block text-3xl font-light text-amber-700 mt-2">
+      <div className="relative z-10 text-center max-w-5xl mx-auto px-8">
+        <div className="mb-8 animate-fade-in">
+          <h1 className="text-7xl font-light text-white mb-4 tracking-wide">
+            Bella Vista
+          </h1>
+          <div className="w-24 h-0.5 gold-gradient mx-auto mb-6"></div>
+          <span className="block text-2xl font-light text-white/90 tracking-widest uppercase">
             Fine Dining Experience
           </span>
-        </h1>
+        </div>
         
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in">
-          Indulge in exquisite cuisine crafted with passion. Reserve your table for an unforgettable culinary journey in the heart of the city.
+        <p className="text-xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed font-light animate-fade-in">
+          Indulge in an extraordinary culinary journey where each dish is meticulously crafted with the finest ingredients. 
+          Experience the pinnacle of gastronomy in an atmosphere of refined elegance.
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 animate-fade-in">
-          <div className="flex items-center gap-2 text-gray-700">
-            <Calendar className="w-5 h-5 text-amber-600" />
-            <span>Open Daily</span>
+        <div className="flex flex-col sm:flex-row gap-8 justify-center items-center mb-16 animate-fade-in">
+          <div className="flex items-center gap-3 text-white/70">
+            <Calendar className="w-6 h-6 text-yellow-400" />
+            <span className="font-light">Open Daily</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-700">
-            <Clock className="w-5 h-5 text-amber-600" />
-            <span>5:00 PM - 11:00 PM</span>
+          <div className="hidden sm:block w-px h-6 bg-white/30"></div>
+          <div className="flex items-center gap-3 text-white/70">
+            <Clock className="w-6 h-6 text-yellow-400" />
+            <span className="font-light">5:00 PM - 11:00 PM</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-700">
-            <Users className="w-5 h-5 text-amber-600" />
-            <span>2-12 Guests</span>
+          <div className="hidden sm:block w-px h-6 bg-white/30"></div>
+          <div className="flex items-center gap-3 text-white/70">
+            <Users className="w-6 h-6 text-yellow-400" />
+            <span className="font-light">Intimate Dining • 2-12 Guests</span>
           </div>
         </div>
         
         <Button 
           onClick={onReserveClick}
-          className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          className="gold-gradient text-black px-12 py-6 text-lg font-medium rounded-none shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 tracking-wider uppercase animate-fade-in"
         >
-          Make Reservation
+          Reserve Your Table
         </Button>
       </div>
 

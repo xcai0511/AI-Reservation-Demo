@@ -27,7 +27,7 @@ const ChatBot = ({ open, onOpenChange }: ChatBotProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "Hello! I'm your Bella Vista assistant. How can I help you today? I can answer questions about our restaurant, menu, reservations, and dining experience.",
+      content: "Good evening, and welcome to Bella Vista. I am your personal dining concierge. How may I assist you with your fine dining experience today?",
       isUser: false,
       timestamp: new Date(),
     },
@@ -39,30 +39,30 @@ const ChatBot = ({ open, onOpenChange }: ChatBotProps) => {
     const lowerMessage = userMessage.toLowerCase();
     
     if (lowerMessage.includes("menu") || lowerMessage.includes("food")) {
-      return "Our menu features exquisite fine dining cuisine with seasonal ingredients. We offer a variety of dishes including premium steaks, fresh seafood, and vegetarian options. Would you like to know about any specific dietary requirements or preferences?";
+      return "Our culinary artisans craft each dish with the finest seasonal ingredients. Our menu features premium cuts of beef, fresh seafood flown in daily, and artisanal vegetarian creations. Would you like to know about our tasting menu or specific dietary accommodations?";
     }
     
     if (lowerMessage.includes("hours") || lowerMessage.includes("open")) {
-      return "We're open daily from 5:00 PM to 11:00 PM. We recommend making a reservation to ensure your preferred dining time.";
+      return "Bella Vista welcomes guests daily from 5:00 PM to 11:00 PM. We highly recommend securing a reservation to ensure your preferred dining time in our intimate setting.";
     }
     
     if (lowerMessage.includes("reservation") || lowerMessage.includes("book")) {
-      return "You can make a reservation by clicking the 'Make Reservation' button on our homepage. We accept reservations for 2-12 guests and can accommodate special requests.";
+      return "I would be delighted to assist with your reservation. Please use the 'Reserve Your Table' button on our homepage. We accommodate parties of 2-12 guests and are happy to arrange special occasions or dietary requirements.";
     }
     
     if (lowerMessage.includes("location") || lowerMessage.includes("address")) {
-      return "Bella Vista is located in the heart of the city. For specific directions, please contact us directly or check our website for detailed location information.";
+      return "Bella Vista is situated in the heart of the city's cultural district. For precise directions and parking information, please contact our maître d' directly.";
     }
     
     if (lowerMessage.includes("dress code") || lowerMessage.includes("attire")) {
-      return "We maintain a smart casual to formal dress code to preserve our fine dining atmosphere. Business casual attire is perfectly appropriate.";
+      return "We maintain an elegant dress code to complement our refined atmosphere. Smart casual to formal attire is appropriate - think business attire or cocktail dress for the evening.";
     }
     
     if (lowerMessage.includes("price") || lowerMessage.includes("cost")) {
-      return "As a fine dining establishment, our prices reflect the quality of our ingredients and service. For detailed pricing, please visit us or contact our team directly.";
+      return "Our pricing reflects the exceptional quality of our ingredients and the artistry of our culinary team. For detailed information about our offerings, I encourage you to speak with our sommelier upon arrival.";
     }
     
-    return "Thank you for your question! For specific inquiries about our menu, reservations, or services, I'd recommend speaking with our staff directly. Is there anything else about Bella Vista I can help you with?";
+    return "Thank you for your inquiry. For personalized assistance with our culinary offerings or to discuss special arrangements, our team would be honored to assist you directly. Is there anything else about your Bella Vista experience I may help clarify?";
   };
 
   const handleSend = async () => {
@@ -79,7 +79,6 @@ const ChatBot = ({ open, onOpenChange }: ChatBotProps) => {
     setInputValue("");
     setIsLoading(true);
 
-    // Simulate AI response delay
     setTimeout(() => {
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -90,7 +89,7 @@ const ChatBot = ({ open, onOpenChange }: ChatBotProps) => {
 
       setMessages(prev => [...prev, botResponse]);
       setIsLoading(false);
-    }, 1000);
+    }, 1500);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -102,33 +101,33 @@ const ChatBot = ({ open, onOpenChange }: ChatBotProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md h-[600px] flex flex-col">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Bot className="w-5 h-5 text-amber-600" />
-            Bella Vista Assistant
+      <DialogContent className="sm:max-w-lg h-[650px] flex flex-col rounded-none shadow-2xl border-gray-200">
+        <DialogHeader className="border-b border-gray-100 pb-4">
+          <DialogTitle className="flex items-center gap-3 text-xl font-light tracking-wide">
+            <Bot className="w-6 h-6 text-yellow-600" />
+            Bella Vista Concierge
           </DialogTitle>
         </DialogHeader>
         
         <ScrollArea className="flex-1 pr-4">
-          <div className="space-y-4">
+          <div className="space-y-6 py-4">
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex gap-3 ${message.isUser ? "justify-end" : "justify-start"}`}
+                className={`flex gap-4 ${message.isUser ? "justify-end" : "justify-start"}`}
               >
                 {!message.isUser && (
-                  <Bot className="w-6 h-6 text-amber-600 mt-1 flex-shrink-0" />
+                  <Bot className="w-8 h-8 text-yellow-600 mt-1 flex-shrink-0" />
                 )}
                 <div
-                  className={`max-w-[80%] p-3 rounded-lg ${
+                  className={`max-w-[80%] p-4 rounded-none shadow-sm ${
                     message.isUser
-                      ? "bg-amber-600 text-white"
-                      : "bg-gray-100 text-gray-900"
+                      ? "bg-gray-900 text-white"
+                      : "bg-gray-50 text-gray-900 border border-gray-100"
                   }`}
                 >
-                  <p className="text-sm">{message.content}</p>
-                  <span className="text-xs opacity-70 mt-1 block">
+                  <p className="text-sm font-light leading-relaxed">{message.content}</p>
+                  <span className="text-xs opacity-60 mt-2 block font-light">
                     {message.timestamp.toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -136,16 +135,16 @@ const ChatBot = ({ open, onOpenChange }: ChatBotProps) => {
                   </span>
                 </div>
                 {message.isUser && (
-                  <User className="w-6 h-6 text-gray-600 mt-1 flex-shrink-0" />
+                  <User className="w-8 h-8 text-gray-600 mt-1 flex-shrink-0" />
                 )}
               </div>
             ))}
             
             {isLoading && (
-              <div className="flex gap-3 justify-start">
-                <Bot className="w-6 h-6 text-amber-600 mt-1 flex-shrink-0" />
-                <div className="bg-gray-100 text-gray-900 p-3 rounded-lg">
-                  <div className="flex space-x-1">
+              <div className="flex gap-4 justify-start">
+                <Bot className="w-8 h-8 text-yellow-600 mt-1 flex-shrink-0" />
+                <div className="bg-gray-50 border border-gray-100 p-4 rounded-none shadow-sm">
+                  <div className="flex space-x-2">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
@@ -156,20 +155,20 @@ const ChatBot = ({ open, onOpenChange }: ChatBotProps) => {
           </div>
         </ScrollArea>
         
-        <div className="flex gap-2 pt-4 border-t">
+        <div className="flex gap-3 pt-4 border-t border-gray-100">
           <Input
-            placeholder="Ask me about Bella Vista..."
+            placeholder="How may I assist you this evening?"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 rounded-none border-gray-200 focus:border-yellow-600 font-light"
           />
           <Button
             onClick={handleSend}
             disabled={!inputValue.trim() || isLoading}
             size="icon"
-            className="bg-amber-600 hover:bg-amber-700"
+            className="gold-gradient text-black rounded-none w-12 h-12 shadow-sm hover:shadow-md transition-all duration-200"
           >
             <Send className="w-4 h-4" />
           </Button>
