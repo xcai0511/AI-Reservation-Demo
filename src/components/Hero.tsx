@@ -1,10 +1,13 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, Users, Settings } from "lucide-react";
+import { Calendar, Clock, Users, Settings, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ChatBot from "./ChatBot";
 
 const Hero = ({ onReserveClick }: { onReserveClick: () => void }) => {
   const navigate = useNavigate();
+  const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center overflow-hidden">
@@ -20,6 +23,17 @@ const Hero = ({ onReserveClick }: { onReserveClick: () => void }) => {
         >
           <Settings className="w-4 h-4 mr-2" />
           Admin Dashboard
+        </Button>
+      </div>
+
+      {/* Chatbot Button */}
+      <div className="fixed bottom-6 right-6 z-20">
+        <Button
+          onClick={() => setIsChatBotOpen(true)}
+          size="lg"
+          className="bg-amber-600 hover:bg-amber-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 rounded-full w-14 h-14"
+        >
+          <MessageCircle className="w-6 h-6" />
         </Button>
       </div>
       
@@ -57,6 +71,8 @@ const Hero = ({ onReserveClick }: { onReserveClick: () => void }) => {
           Make Reservation
         </Button>
       </div>
+
+      <ChatBot open={isChatBotOpen} onOpenChange={setIsChatBotOpen} />
     </div>
   );
 };
