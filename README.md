@@ -38,8 +38,8 @@ Start the backend server:
 ```bash
 npm run dev
 ```
-
 Backend runs on: `http://localhost:3000`
+
 ---
 
 ### 3. Database Setup
