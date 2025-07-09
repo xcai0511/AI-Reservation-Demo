@@ -72,7 +72,7 @@ npm install
 npm run dev
 ```
 
-Frontend runs on: `http://localhost:5173`  
+Frontend runs on: `http://localhost:8080`  
 Ensure it points API calls to `http://localhost:3000`
 
 ---
