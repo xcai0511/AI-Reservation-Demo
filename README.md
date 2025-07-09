@@ -14,9 +14,12 @@ It focuses on backend reservation logic, slot availability tracking, and will in
 
 ---
 
-## 🚀 Getting Started\n\n### 1. Clone the Repository
+## 🚀 Getting Started
+
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/xcai0511/AI-Reservation-Demo.git\ncd AI-Reservation-Demo
+git clone https://github.com/xcai0511/AI-Reservation-Demo.git
+cd AI-Reservation-Demo
 ```
 ### 2. Backend Setup
 ```bash
