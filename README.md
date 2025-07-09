@@ -121,7 +121,7 @@ DATABASE_URL=postgresql://whitneycai@localhost:5432/reservation_demo
 
 ---
 
-## 🙋\u200d♀️ Need Help?
+## 🙋️ Need Help?
 
 Make sure:
 - PostgreSQL is running
