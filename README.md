@@ -1,73 +1,129 @@
-# Welcome to your Lovable project
+# 🍽️ AI Restaurant Reservation System (Demo)
 
-## Project info
+This is a demo project for a voice-enabled fine-dining restaurant reservation system. 
+It focuses on backend reservation logic, slot availability tracking, and will integrate an AI voice assistant using OpenAI and Twilio in later stages.
 
-**URL**: https://lovable.dev/projects/55dd8955-5834-41fb-a4e7-3e60cbbde932
+---
 
-## How can I edit this code?
+## ⚙️ Tech Stack
 
-There are several ways of editing your application.
+- **Frontend**: React.js (in `client/`)
+- **Backend**: Node.js (Express)
+- **Database**: PostgreSQL
+- **Voice AI**: Twilio + OpenAI (coming soon)
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/55dd8955-5834-41fb-a4e7-3e60cbbde932) and start prompting.
+## 🚀 Getting Started\n\n### 1. Clone the Repository
+```bash
+git clone https://github.com/xcai0511/AI-Reservation-Demo.git\ncd AI-Reservation-Demo
+```
+### 2. Backend Setup
+```bash
+cd server
+npm install
+```
+Create a `.env` file in the `server/` folder:
+```env
+DATABASE_URL=postgresql://your_username@localhost:5432/reservation_demo
+```
+> > Replace `your_username` with your PostgreSQL username (e.g. `whitneycai`).  
+> > You can also use `.env.example` as a reference.
 
-Changes made via Lovable will be committed automatically to this repo.
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Start the backend server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Backend runs on: `http://localhost:3000`
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 3. Database Setup
+If you haven't installed PostgreSQL:
 
-**Use GitHub Codespaces**
+```bash
+brew install postgresql
+brew services start postgresql@14
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Then, from the project root, run:
 
-## What technologies are used for this project?
+```bash
+chmod +x setup-db.sh    # only once
+./setup-db.sh
+```
 
-This project is built with:
+This will:
+- Create the `reservation_demo` database
+- Run schema setup in `db/migrate.sql`
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/55dd8955-5834-41fb-a4e7-3e60cbbde932) and click on Share -> Publish.
+### 4. Frontend Setup
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+cd client
+npm install
+npm run dev
+```
 
-Yes, you can!
+Frontend runs on: `http://localhost:5173`  
+Ensure it points API calls to `http://localhost:3000`
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 📁 Project Structure
+
+```
+AI-Reservation-Demo/
+├── client/                  # React frontend
+├── server/                  # Express backend
+│   ├── controllers/         # Route logic
+│   ├── db/                  # PostgreSQL connection + schema
+│   ├── routes/              # API endpoints
+│   ├── server.js            # Backend entry
+│   └── .env                 # Environment config
+├── setup-db.sh              # DB init script
+├── .env.example             # Sample env file
+└── README.md
+```
+
+---
+
+## 🔜 Coming Soon
+- Twilio Voice Integration
+- OpenAI-based voice reservation logic
+- Admin dashboard to manage reservations
+
+
+---
+
+## 🛠️ Common Commands
+
+| Task                          | Command                            |
+|-------------------------------|-------------------------------------|
+| Start backend server          | `npm run dev` (in `server/`)        |
+| Start frontend                | `npm run dev` (in `client/`)        |
+| Run DB setup script           | `./setup-db.sh` (from project root) |
+
+---
+
+## 📌 Example `.env` for Backend
+
+```env
+DATABASE_URL=postgresql://whitneycai@localhost:5432/reservation_demo
+```
+
+---
+
+## 🙋\u200d♀️ Need Help?
+
+Make sure:
+- PostgreSQL is running
+- You created the database
+- You ran the setup script
+- You created your `.env`
+
+Then you're good to go!"
