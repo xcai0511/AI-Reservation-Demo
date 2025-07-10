@@ -1,12 +1,15 @@
 #!/bin/bash
-# Simple setup script to create database and run migration
 
 DB_NAME="reservation_demo"
+MIGRATION_PATH="server/db/migrate.sql"
 
 echo "Creating PostgreSQL database: $DB_NAME"
-createdb $DB_NAME
+createdb $DB_NAME 2>/dev/null || echo "Database $DB_NAME already exists."
 
 echo "Running migration script..."
-psql -d $DB_NAME -f db/migrate.sql
-
-echo "✅ Database setup complete."
+if [ -f "$MIGRATION_PATH" ]; then
+  psql -d $DB_NAME -f $MIGRATION_PATH
+  echo "✅ Database setup complete."
+else
+  echo "❌ Migration script not found at $MIGRATION_PATH"
+fi
