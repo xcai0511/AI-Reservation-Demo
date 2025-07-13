@@ -1,5 +1,5 @@
 
-import { useState, useMemo } from "react";
+import {useState, useMemo, useEffect} from "react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
@@ -8,74 +8,81 @@ import ReservationTable from "../components/ReservationTable";
 import { Calendar, Clock, Users, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SlotManager from "../components/SlotManager";
+import {getAllReservations} from "../services/reservationService";
 
-// Mock data for demonstration
-const mockReservations = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "555-123-4567",
-    date: new Date("2024-12-20"),
-    time: "7:00 PM",
-    guests: "4",
-    specialRequests: "Birthday celebration",
-    status: "upcoming"
-  },
-  {
-    id: "2",
-    name: "Jane Smith", 
-    email: "jane@example.com",
-    phone: "555-987-6543",
-    date: new Date("2024-12-15"),
-    time: "6:30 PM",
-    guests: "2",
-    specialRequests: "",
-    status: "past"
-  },
-  {
-    id: "3",
-    name: "Mike Johnson",
-    email: "mike@example.com", 
-    phone: "555-456-7890",
-    date: new Date("2024-12-18"),
-    time: "8:00 PM",
-    guests: "6",
-    specialRequests: "Dietary restrictions - vegetarian",
-    status: "today"
-  },
-  {
-    id: "4",
-    name: "Sarah Wilson",
-    email: "sarah@example.com",
-    phone: "555-321-0987",
-    date: new Date("2024-12-22"),
-    time: "7:30 PM", 
-    guests: "3",
-    specialRequests: "",
-    status: "upcoming"
-  }
-];
+// // Mock data for demonstration
+// const mockReservations = [
+//   {
+//     id: "1",
+//     name: "John Doe",
+//     email: "john@example.com",
+//     phone: "555-123-4567",
+//     date: new Date("2024-12-20"),
+//     time: "7:00 PM",
+//     guests: "4",
+//     specialRequests: "Birthday celebration",
+//     status: "upcoming"
+//   },
+//   {
+//     id: "2",
+//     name: "Jane Smith",
+//     email: "jane@example.com",
+//     phone: "555-987-6543",
+//     date: new Date("2024-12-15"),
+//     time: "6:30 PM",
+//     guests: "2",
+//     specialRequests: "",
+//     status: "past"
+//   },
+//   {
+//     id: "3",
+//     name: "Mike Johnson",
+//     email: "mike@example.com",
+//     phone: "555-456-7890",
+//     date: new Date("2024-12-18"),
+//     time: "8:00 PM",
+//     guests: "6",
+//     specialRequests: "Dietary restrictions - vegetarian",
+//     status: "today"
+//   },
+//   {
+//     id: "4",
+//     name: "Sarah Wilson",
+//     email: "sarah@example.com",
+//     phone: "555-321-0987",
+//     date: new Date("2024-12-22"),
+//     time: "7:30 PM",
+//     guests: "3",
+//     specialRequests: "",
+//     status: "upcoming"
+//   }
+// ];
 
 type FilterStatus = "all" | "today" | "this-week" | "upcoming" | "past";
 
 const AdminDashboard = () => {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
   const navigate = useNavigate();
+  const [reservations, setReservations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const filteredReservations = useMemo(() => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0); // Clear time for comparison
+
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - today.getDay());
+
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
 
-    return mockReservations.filter((reservation) => {
-      const reservationDate = new Date(reservation.date);
-      
+    return reservations.filter((reservation) => {
+      const reservationDate = new Date(reservation.reservation_date);
+      reservationDate.setHours(0, 0, 0, 0); // normalize
+
       switch (filterStatus) {
         case "today":
-          return reservationDate.toDateString() === today.toDateString();
+          return reservationDate.getTime() === today.getTime();
         case "this-week":
           return reservationDate >= startOfWeek && reservationDate <= endOfWeek;
         case "upcoming":
@@ -86,7 +93,7 @@ const AdminDashboard = () => {
           return true;
       }
     });
-  }, [filterStatus]);
+  }, [filterStatus, reservations]);
 
   const getStatusCounts = () => {
     const today = new Date();
@@ -96,19 +103,48 @@ const AdminDashboard = () => {
     endOfWeek.setDate(startOfWeek.getDate() + 6);
 
     return {
-      total: mockReservations.length,
-      today: mockReservations.filter(r => new Date(r.date).toDateString() === today.toDateString()).length,
-      thisWeek: mockReservations.filter(r => {
+      total: reservations.length,
+      today: reservations.filter(r => new Date(r.date).toDateString() === today.toDateString()).length,
+      thisWeek: reservations.filter(r => {
         const date = new Date(r.date);
         return date >= startOfWeek && date <= endOfWeek;
       }).length,
-      upcoming: mockReservations.filter(r => new Date(r.date) > today).length,
-      past: mockReservations.filter(r => new Date(r.date) < today).length
+      upcoming: reservations.filter(r => new Date(r.date) > today).length,
+      past: reservations.filter(r => new Date(r.date) < today).length
     };
   };
 
   const statusCounts = getStatusCounts();
 
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await getAllReservations();
+        const mapped = data.map((r) => ({
+          id: r.id,
+          name: r.name,
+          email: r.email ?? "",
+          phone: r.phone ?? "",
+          date: new Date(r.reservation_date),
+          time: r.reservation_time,
+          guests: r.party_size.toString(),
+          specialRequests: r.special_request ?? "",
+          status: "",
+        }));
+        setReservations(mapped);
+      } catch (error) {
+        console.error("Failed to fetch reservations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  if (loading) return <p className="text-center mt-8">Loading reservations...</p>;
+
+  console.log("Raw reservations:", reservations);
+  console.log("Filtered:", filteredReservations);
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-6">
