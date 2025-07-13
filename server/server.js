@@ -1,8 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const { port } = require('./config');
-const reservationRoutes = require("./routes/reservationRoutes");
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { port } from './config.js';
+import reservationRoutes from "./routes/reservationRoutes.js";
 
 dotenv.config();
 const app = express();
