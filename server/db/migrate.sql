@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS reservations;
+DROP TABLE IF EXISTS slot_availability;
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Reservations Table
@@ -19,5 +22,5 @@ CREATE TABLE IF NOT EXISTS slot_availability (
     reservation_time TIME NOT NULL,
     seats_booked INTEGER NOT NULL DEFAULT 0,
     max_capacity INTEGER NOT NULL DEFAULT 40,
-    UNIQUE (reservation_date, reservation_time)
+    is_blocked BOOLEAN NOT NULL DEFAULT false
     );
