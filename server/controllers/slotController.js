@@ -11,14 +11,14 @@ export const getSlotsByDate = async (req, res) => {
     try {
         // Check if slots exist
         const result = await pool.query(
-            `SELECT * FROM slot_availability WHERE reservation_date = $1 ORDER BY reservation_time`,
+            `SELECT * FROM slot_availability WHERE reservation_date = $1 AND is_blocked = false ORDER BY reservation_time`,
             [date]
         );
 
         if (result.rows.length === 0) {
             await generateDailySlots(date);
             const regenerated = await pool.query(
-                `SELECT * FROM slot_availability WHERE reservation_date = $1 ORDER BY reservation_time`,
+                `SELECT * FROM slot_availability WHERE reservation_date = $1 AND is_blocked = false ORDER BY reservation_time`,
                 [date]
             );
             return res.json(regenerated.rows);
