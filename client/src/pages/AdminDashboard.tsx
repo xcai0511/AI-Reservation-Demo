@@ -7,6 +7,7 @@ import { Badge } from "../components/ui/badge";
 import ReservationTable from "../components/ReservationTable";
 import { Calendar, Clock, Users, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import SlotManager from "../components/SlotManager";
 
 // Mock data for demonstration
 const mockReservations = [
@@ -217,6 +218,9 @@ const AdminDashboard = () => {
             <ReservationTable reservations={filteredReservations} />
           </CardContent>
         </Card>
+
+        {/* Slot Availability Manager */}
+        <SlotManager />
       </div>
     </div>
   );
