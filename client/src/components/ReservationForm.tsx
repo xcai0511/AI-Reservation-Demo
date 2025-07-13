@@ -65,6 +65,7 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
         const formattedData = {
           name: formData.name,
           phone: formData.phone,
+          email: formData.email,
           party_size: parseInt(formData.party_size),
           reservation_date: formData.date.toISOString().slice(0, 10), // "YYYY-MM-DD"
           reservation_time: convertTo24Hour(formData.time),           // "HH:mm"

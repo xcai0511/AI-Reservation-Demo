@@ -5,6 +5,7 @@ export const createReservation = async (req, res) => {
     const {
         name,
         phone,
+        email,
         party_size,
         reservation_date,
         reservation_time,
@@ -43,11 +44,13 @@ export const createReservation = async (req, res) => {
             return res.status(400).json({ error: 'This time slot is currently unavailable.' });
         }
 
-        const insertReservation = await client.query(`
-      INSERT INTO reservations (name, phone, party_size, reservation_date, reservation_time, special_request)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING *
-    `, [name, phone, party_size, reservation_date, reservation_time, special_request]);
+        const insertReservation = await client.query(
+            `INSERT INTO reservations
+             (name, phone, email, party_size, reservation_date, reservation_time, special_request)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
+                 RETURNING *`,
+            [name, phone, email, party_size, reservation_date, reservation_time, special_request]
+        );
 
         await client.query(`
       UPDATE slot_availability

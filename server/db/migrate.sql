@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS reservations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name TEXT NOT NULL,
     phone TEXT NOT NULL,
+    email TEXT NOT NULL,
     party_size INTEGER NOT NULL CHECK (party_size BETWEEN 2 AND 12),
     reservation_date DATE NOT NULL,
     reservation_time TIME NOT NULL,

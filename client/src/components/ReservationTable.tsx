@@ -65,7 +65,7 @@ const ReservationTable = ({ reservations }: ReservationTableProps) => {
                   <User className="w-4 h-4 text-gray-400" />
                   <div>
                     <p className="font-medium text-gray-900">{reservation.name}</p>
-                    <p className="text-sm text-gray-500">ID: {reservation.id}</p>
+                    {/*<p className="text-sm text-gray-500">ID: {reservation.id}</p>*/}
                   </div>
                 </div>
               </TableCell>
