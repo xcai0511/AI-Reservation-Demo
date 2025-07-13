@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -12,6 +12,7 @@ import { CalendarIcon, Users, Mail, Phone, User } from "lucide-react";
 import {createReservation} from "../services/reservationService";
 import {convertTo24Hour} from "../utils/convertTo24Hour";
 import {useNavigate} from "react-router-dom";
+import { fetchAvailableSlotsByDate } from "../services/slotService";
 
 interface ReservationData {
   name: string;
@@ -29,6 +30,7 @@ interface ReservationFormProps {
 }
 
 const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
+  const [availableTimes, setAvailableTimes] = useState<string[]>([]);
   const [formData, setFormData] = useState<ReservationData>({
     name: "",
     email: "",
@@ -39,11 +41,11 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
     specialRequests: ""
   });
 
-  const timeSlots = [
-    "5:00 PM", "6:00 PM",
-    "7:00 PM", "8:00 PM",
-    "9:00 PM", "10:00 PM",
-  ];
+  // const timeSlots = [
+  //   "5:00 PM", "6:00 PM",
+  //   "7:00 PM", "8:00 PM",
+  //   "9:00 PM", "10:00 PM",
+  // ];
 
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
@@ -81,6 +83,21 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
       console.error("Error creating reservation", err);
     }
   };
+
+  useEffect(() => {
+    const fetchSlots = async () => {
+      if (!formData.date) return;
+      try {
+        const dateStr = formData.date.toISOString().split("T")[0];
+        const slots = await fetchAvailableSlotsByDate(dateStr);
+        const times = slots.map((slot: any) => slot.reservation_time.slice(0, 5)); // keep "HH:mm"
+        setAvailableTimes(times);
+      } catch (err) {
+        console.error("Failed to fetch available slots:", err);
+      }
+    };
+    fetchSlots();
+  }, [formData.date]);
 
   return (
     <div className="min-h-screen cream-gradient py-16 px-6">
@@ -169,17 +186,34 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
               </div>
 
               <div className="space-y-3">
+                {/*<Label className="text-gray-800 font-medium tracking-wide">Preferred Time</Label>*/}
+                {/*<Select value={formData.time} onValueChange={(time) => setFormData({ ...formData, time })}>*/}
+                {/*  <SelectTrigger className="border-gray-200 focus:border-yellow-600 rounded-none h-12 font-light">*/}
+                {/*    <SelectValue placeholder="Select time" />*/}
+                {/*  </SelectTrigger>*/}
+                {/*  <SelectContent className="rounded-none shadow-xl">*/}
+                {/*    {timeSlots.map((time) => (*/}
+                {/*      <SelectItem key={time} value={time} className="font-light">*/}
+                {/*        {time}*/}
+                {/*      </SelectItem>*/}
+                {/*    ))}*/}
+                {/*  </SelectContent>*/}
+                {/*</Select>*/}
                 <Label className="text-gray-800 font-medium tracking-wide">Preferred Time</Label>
                 <Select value={formData.time} onValueChange={(time) => setFormData({ ...formData, time })}>
                   <SelectTrigger className="border-gray-200 focus:border-yellow-600 rounded-none h-12 font-light">
                     <SelectValue placeholder="Select time" />
                   </SelectTrigger>
                   <SelectContent className="rounded-none shadow-xl">
-                    {timeSlots.map((time) => (
-                      <SelectItem key={time} value={time} className="font-light">
-                        {time}
-                      </SelectItem>
-                    ))}
+                    {availableTimes.length > 0 ? (
+                        availableTimes.map((time) => (
+                            <SelectItem key={time} value={time} className="font-light">
+                              {format(new Date(`1970-01-01T${time}`), "h:mm a")}
+                            </SelectItem>
+                        ))
+                    ) : (
+                        <div className="p-4 text-sm text-gray-500">No available slots</div>
+                    )}
                   </SelectContent>
                 </Select>
               </div>

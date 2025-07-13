@@ -7,6 +7,11 @@ export const fetchAllSlotsByDate = async (date: string) => {
     return await response.data;
 };
 
+export const fetchAvailableSlotsByDate = async (date: string) => {
+    const res = await axios.get(`${BASE_URL}/available?date=${date}`);
+    return res.data;
+};
+
 export const blockSlotById = async (id: string) => {
     const res = await axios.patch(`${BASE_URL}/${id}/block`);
     return res.data;
