@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { CalendarIcon, Users, Mail, Phone, User } from "lucide-react";
 import {createReservation} from "../services/reservationService";
 import {convertTo24Hour} from "../utils/convertTo24Hour";
+import {useNavigate} from "react-router-dom";
 
 interface ReservationData {
   name: string;
@@ -44,6 +45,7 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
     "9:00 PM", "9:30 PM", "10:00 PM", "10:30 PM"
   ];
 
+  const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.party_size < 2 || formData.party_size > 12) {
@@ -67,9 +69,11 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
           special_request: formData.specialRequests,
         };
 
-        console.log("Sending formatted data →", formattedData);
-        await createReservation(formattedData);
-        alert("Reservation saved!");
+        const response = await createReservation(formattedData);
+        console.log(response);
+
+        // ✅ Navigate with reservation data
+        navigate("/confirmation", { state: { reservation: response } });
       } else {
         alert("Please fill all required fields.");
       }
