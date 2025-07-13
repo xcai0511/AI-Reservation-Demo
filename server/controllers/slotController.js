@@ -85,3 +85,35 @@ export const unblockSlot = async (req, res) => {
     }
 };
 
+export const blockAllSlotsByDate = async (req, res) => {
+    const { date } = req.body;
+    if (!date) return res.status(400).json({ error: "Date is required" });
+
+    try {
+        const result = await pool.query(
+            `UPDATE slot_availability SET is_blocked = true WHERE reservation_date = $1 RETURNING *`,
+            [date]
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error blocking all slots:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+export const unblockAllSlotsByDate = async (req, res) => {
+    const { date } = req.body;
+    if (!date) return res.status(400).json({ error: "Date is required" });
+
+    try {
+        const result = await pool.query(
+            `UPDATE slot_availability SET is_blocked = false WHERE reservation_date = $1 RETURNING *`,
+            [date]
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error unblocking all slots:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+

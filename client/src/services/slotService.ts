@@ -16,3 +16,13 @@ export const unblockSlotById = async (id: string) => {
     const res = await axios.patch(`${BASE_URL}/${id}/unblock`);
     return res.data;
 };
+
+export const blockAllSlots = async (date: string) => {
+    const res = await axios.patch(`${BASE_URL}/block-all`, { date });
+    return res.data;
+};
+
+export const unblockAllSlots = async (date: string) => {
+    const res = await axios.patch(`${BASE_URL}/unblock-all`, { date });
+    return res.data;
+};

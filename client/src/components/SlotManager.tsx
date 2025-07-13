@@ -4,7 +4,13 @@ import { Button } from "./ui/button";
 import {Card, CardHeader, CardTitle, CardContent, CardDescription} from "./ui/card";
 import { Label } from "./ui/label";
 import { cn } from "../lib/utils";
-import { fetchAllSlotsByDate, blockSlotById, unblockSlotById } from "../services/slotService";
+import {
+    fetchAllSlotsByDate,
+    blockSlotById,
+    unblockSlotById,
+    blockAllSlots,
+    unblockAllSlots
+} from "../services/slotService";
 
 
 type Slot = {
@@ -51,6 +57,20 @@ const SlotManager = () => {
         if (selectedDate) fetchAndSetSlots(selectedDate);
     };
 
+    const handleBlockAll = async () => {
+        if (!selectedDate) return;
+        const dateStr = selectedDate.toISOString().split("T")[0];
+        await blockAllSlots(dateStr);
+        fetchAndSetSlots(selectedDate);
+    };
+
+    const handleUnblockAll = async () => {
+        if (!selectedDate) return;
+        const dateStr = selectedDate.toISOString().split("T")[0];
+        await unblockAllSlots(dateStr);
+        fetchAndSetSlots(selectedDate);
+    };
+
     return (
         <Card className="mt-10">
             <CardHeader>
@@ -70,6 +90,16 @@ const SlotManager = () => {
                             <Label className="text-base font-semibold">
                                 {selectedDate ? `Slots for ${selectedDate.toDateString()}` : "Select a date to view slots"}
                             </Label>
+                            {selectedDate && (
+                                <div className="flex gap-2">
+                                    <Button size="sm" variant="default" onClick={handleBlockAll}>
+                                        Block Day
+                                    </Button>
+                                    <Button size="sm" variant="outline" onClick={handleUnblockAll}>
+                                        Unblock Day
+                                    </Button>
+                                </div>
+                            )}
                         </div>
 
                         {isLoading ? (
@@ -107,33 +137,6 @@ const SlotManager = () => {
                                 ) : (
                                     <p className="text-red-500 text-sm">Error: Slots data is not an array</p>
                                 )}
-                      {/*          {slots.map((slot) => (*/}
-                      {/*              <div*/}
-                      {/*                  key={slot.id}*/}
-                      {/*                  className={cn(*/}
-                      {/*                      "flex justify-between items-center px-4 py-2 rounded-md border",*/}
-                      {/*                      slot.is_blocked ? "bg-red-50 border-red-200" : "bg-gray-50 border-gray-200"*/}
-                      {/*                  )}*/}
-                      {/*              >*/}
-                      {/*                  <div>*/}
-                      {/*                      <span className="font-medium text-sm">{slot.reservation_time.slice(0, 5)}</span>*/}
-                      {/*                      <span className={cn("ml-3 text-sm", slot.is_blocked ? "text-red-600" : "text-gray-600")}>*/}
-                      {/*  {slot.is_blocked ? "Blocked" : `${slot.max_capacity - slot.seats_booked} seats available`}*/}
-                      {/*</span>*/}
-                      {/*                  </div>*/}
-                      {/*                  <div>*/}
-                      {/*                      {slot.is_blocked ? (*/}
-                      {/*                          <Button size="sm" variant="outline" onClick={() => handleUnblock(slot.id)}>*/}
-                      {/*                              Unblock*/}
-                      {/*                          </Button>*/}
-                      {/*                      ) : (*/}
-                      {/*                          <Button size="sm" variant="outline" onClick={() => handleBlock(slot.id)}>*/}
-                      {/*                              Block*/}
-                      {/*                          </Button>*/}
-                      {/*                      )}*/}
-                      {/*                  </div>*/}
-                      {/*              </div>*/}
-                      {/*          ))}*/}
                             </div>
                         )}
                     </div>
