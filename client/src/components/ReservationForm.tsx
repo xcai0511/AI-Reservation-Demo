@@ -9,6 +9,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { cn } from "../lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, Users, Mail, Phone, User } from "lucide-react";
+import {createReservation} from "../services/reservationService";
+import {convertTo24Hour} from "../utils/convertTo24Hour";
 
 interface ReservationData {
   name: string;
@@ -16,7 +18,7 @@ interface ReservationData {
   phone: string;
   date: Date | undefined;
   time: string;
-  guests: string;
+  party_size: string;
   specialRequests: string;
 }
 
@@ -32,7 +34,7 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
     phone: "",
     date: undefined,
     time: "",
-    guests: "",
+    party_size: "",
     specialRequests: ""
   });
 
@@ -42,10 +44,37 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
     "9:00 PM", "9:30 PM", "10:00 PM", "10:30 PM"
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.name && formData.email && formData.date && formData.time && formData.guests) {
-      onSubmit(formData);
+    if (formData.party_size < 2 || formData.party_size > 12) {
+      alert("Party size must be between 2 and 12.");
+      return;
+    }
+    try {
+      if (
+          formData.name &&
+          formData.email &&
+          formData.date &&
+          formData.time &&
+          formData.party_size
+      ) {
+        const formattedData = {
+          name: formData.name,
+          phone: formData.phone,
+          party_size: parseInt(formData.party_size),
+          reservation_date: formData.date.toISOString().slice(0, 10), // "YYYY-MM-DD"
+          reservation_time: convertTo24Hour(formData.time),           // "HH:mm"
+          special_request: formData.specialRequests,
+        };
+
+        console.log("Sending formatted data →", formattedData);
+        await createReservation(formattedData);
+        alert("Reservation saved!");
+      } else {
+        alert("Please fill all required fields.");
+      }
+    } catch (err) {
+      console.error("Error creating reservation", err);
     }
   };
 
@@ -156,12 +185,12 @@ const ReservationForm = ({ onSubmit, onBack }: ReservationFormProps) => {
                   <Users className="w-4 h-4 text-yellow-600" />
                   Party Size
                 </Label>
-                <Select value={formData.guests} onValueChange={(guests) => setFormData({ ...formData, guests })}>
+                <Select value={formData.party_size} onValueChange={(party_size) => setFormData({ ...formData, party_size })}>
                   <SelectTrigger className="border-gray-200 focus:border-yellow-600 rounded-none h-12 font-light">
                     <SelectValue placeholder="Number of guests" />
                   </SelectTrigger>
                   <SelectContent className="rounded-none shadow-xl">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
+                    {[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
                       <SelectItem key={num} value={num.toString()} className="font-light">
                         {num} {num === 1 ? 'Guest' : 'Guests'}
                       </SelectItem>

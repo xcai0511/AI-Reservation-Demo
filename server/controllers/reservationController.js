@@ -1,6 +1,7 @@
 import pool from '../db/index.js';
 
 export const createReservation = async (req, res) => {
+    console.log("Received req.body →", req.body);
     const {
         name,
         phone,
@@ -54,7 +55,7 @@ export const createReservation = async (req, res) => {
     } catch (error) {
         await client.query('ROLLBACK');
         console.error('Error making reservation:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error', detail: error.message });
     } finally {
         client.release();
     }
