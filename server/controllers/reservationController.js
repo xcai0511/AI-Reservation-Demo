@@ -1,7 +1,7 @@
 import pool from '../db/index.js';
 
 export const createReservation = async (req, res) => {
-    console.log("Received req.body →", req.body);
+    // console.log("Received req.body →", req.body);
     const {
         name,
         phone,
@@ -36,6 +36,11 @@ export const createReservation = async (req, res) => {
         if (slot.seats_booked + party_size > slot.max_capacity) {
             await client.query('ROLLBACK');
             return res.status(400).json({ error: 'This time slot is fully booked.' });
+        }
+
+        if (slot.is_blocked) {
+            await client.query('ROLLBACK');
+            return res.status(400).json({ error: 'This time slot is currently unavailable.' });
         }
 
         const insertReservation = await client.query(`
